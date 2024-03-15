@@ -13,6 +13,11 @@
   },
   "private": true,
   "dependencies": {
-    "@octokit/rest": "^20.0.2"
+    "@octokit/rest": "^20.0.2",
+    "cheerio": "^1.0.0-rc.12",
+    "cherio": "^1.0.0-rc.2",
+    "node-fetch": "^3.3.2",
+    "tinify": "^1.7.1",
+    "xml2js": "^0.6.2"
   }
 }
