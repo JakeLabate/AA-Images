@@ -1,6 +1,6 @@
-const { Octokit } = require("@octokit/rest");
-const fs = require("fs");
-const path = require("path");
+import {Octokit} from '@octokit/rest';
+import fs from 'fs';
+import path from 'path';
 
 // Initialize Octokit with your GitHub token
 const octokit = new Octokit({

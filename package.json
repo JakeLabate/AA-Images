@@ -1,0 +1,18 @@
+{
+  "type": "module",
+  "name": "aa-images",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JakeLabate/AA-Images.git"
+  },
+  "private": true,
+  "dependencies": {
+    "@octokit/rest": "^20.0.2"
+  }
+}
