@@ -48,7 +48,7 @@ async function getImageSources(urls) {
 						alt: alt || null,
 						title: title || null,
 						loading: loading || null,
-						path: pathName === '/' ? '/_' : pathName,
+						path: pathName === '/' ? '_' : pathName.charAt(0) === '/' ? pathName.substring(1) : pathName
 					});
 
 				}
@@ -129,19 +129,19 @@ async function compressImages(json, maxImages) {
 }
 
 // Function to upload a single file
-async function uploadFile(domainCode, filePath) {
-	console.log(domainCode + ' ' + filePath);
-	const content = fs.readFileSync(filePath, 'base64');
-
-	domainCode = path.basename(filePath);
-	const githubPath = `domains/${domainCode}`; // Adjust the folder path as needed
+async function uploadFile(image) {
+	// Assuming image has properties: { src, path, compressedLocalPath }
+	// where compressedLocalPath is the local path of the compressed image
+	const content = fs.readFileSync(image.input.path, 'base64');
+	const domainCode = path.basename(image.input.path);
+	const githubPath = `domains${image.path}/${domainCode}`; // Adjust the path as needed
 
 	try {
 		const response = await octokit.repos.createOrUpdateFileContents({
-			owner: 'Jake Labate',
+			owner: 'JakeLabate', // GitHub username
 			repo: 'AA-Images',
 			path: githubPath,
-			message: `Add ${filePath}`,
+			message: `Add compressed image for ${image.path}`,
 			content: content,
 			committer: {
 				name: `Jake Labate`,
@@ -153,11 +153,12 @@ async function uploadFile(domainCode, filePath) {
 			},
 		});
 
-		console.log(`Successfully uploaded ${filePath}: ${response.data.content.html_url}`);
+		console.log(`Successfully uploaded ${image.input.path}: ${response.data.content.html_url}`);
 	} catch (error) {
-		console.error(`Error uploading ${filePath}: ${error}`);
+		console.error(`Error uploading ${image.input.path}: ${error}`);
 	}
 }
+
 
 async function run({sitemapUrl, maxImages}) {
 
@@ -166,20 +167,14 @@ async function run({sitemapUrl, maxImages}) {
 	const compressedJson = await compressImages(json, maxImages);
 
 	for (const image of compressedJson) {
-
-		const folderPath = image.input.path === '/_' ? '/home' : image.input.path;
-		fs.readdir(folderPath, (err, files) => {
-			if (err) return console.error(`Unable to scan directory: ${err}`);
-			files.forEach(file => {
-				uploadFile(path.join(folderPath, file)).then(r => console.log(r));
-			});
-		});
+		// Ensure image has the necessary properties, including compressedLocalPath
+		await uploadFile(image);
 	}
 
 }
 
 run({
 	domainCode: 'espaciowaikiki',
-	sitemapUrl: 'https://www.jakelabate.com/sitemap.xml',
+	sitemapUrl: 'https://www.espaciowaikiki.com/page-sitemap.xml',
 	maxImages: 2
 });
