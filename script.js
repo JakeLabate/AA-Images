@@ -4,7 +4,6 @@ import https from 'https';
 import xml2js from 'xml2js';
 import cheerio from 'cheerio';
 import dotenv from 'dotenv';
-
 dotenv.config();
 
 const octokit = new Octokit({
@@ -12,7 +11,7 @@ const octokit = new Octokit({
 });
 
 class CompressImages {
-	constructor({ domainCode, sitemapUrl, maxImages }) {
+	constructor({domainCode, sitemapUrl, maxImages}) {
 		this.domainCode = domainCode;
 		this.sitemapUrl = sitemapUrl;
 		this.maxImages = maxImages;
@@ -38,31 +37,29 @@ class CompressImages {
 		return parsedData.urlset.url.map(urlEntry => urlEntry.loc[0].trim());
 	}
 	async getImageSources(urls) {
+		
+		function formatUrl(relativePath) {
+			if (relativePath.startsWith('/')) {
+				return baseUrl + relativePath;
+			} else if (relativePath.startsWith('http')) {
+				return relativePath;
+			} else {
+				return baseUrl + '/' + relativePath;
+			}
+		}
+		
 		const baseUrl = new URL(this.sitemapUrl).origin;
 
 		let images = [];
 		for (const url of urls.slice(0, this.maxImages)) { // Limit to maxImages for demonstration
 			try {
+				
 				const response = await fetch(url);
 				const html = await response.text();
 				const $ = cheerio.load(html);
 				$('img').each((_, element) => {
 
 					const src = $(element).attr('src');
-
-					function formatUrl(relativePath) {
-
-						if (relativePath.startsWith('/wp-content')) {
-							return baseUrl + relativePath;
-						} else if (relativePath.startsWith('/')) {
-							return baseUrl + relativePath;
-						} else if (relativePath.startsWith('http')) {
-							return relativePath;
-						} else {
-							return baseUrl + '/' + relativePath;
-						}
-					}
-
 					if (src && !src.endsWith('.svg')) { // Skip SVGs
 						images.push({
 							path: new URL(url).pathname,
@@ -197,7 +194,7 @@ class CompressImages {
 				},
 			});
 
-			console.log(`Successfully uploaded ${imageName}: ${response.data.content.html_url}`);
+			console.log(`Upload success to ${response.data.content.html_url}`);
 		} catch (error) {
 			console.error(`Error uploading ${compressedImage.output.url}:`, error.message);
 		}
