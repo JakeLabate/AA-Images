@@ -159,13 +159,8 @@ class CompressImages {
 					.catch(error => reject(error));
 				});
 			}
-			function jsonToBase64(json) {
-				const jsonString = JSON.stringify(json, null, 2);
-				return Buffer.from(jsonString).toString('base64');
-			}
 			async function getFileSha(path) {
 				// Function to check if the file exists and get its SHA (if it does)
-
 				try {
 					const { data } = await octokit.repos.getContent({
 						owner: 'JakeLabate',
@@ -182,8 +177,8 @@ class CompressImages {
 			}
 			async function uploadFile({path, content, message}) {
 				await octokit.repos.createOrUpdateFileContents({
-					message,
 					content,
+					message,
 					owner: 'JakeLabate',
 					repo: 'AA-Images',
 					path: `domains/${domainCode}${imagePath}${imageFileName}/${path}`,
@@ -203,65 +198,69 @@ class CompressImages {
 				const result = byteSize / speedBytesPerSecond * 1000; // milliseconds
 				return Number(result.toFixed(0));
 			}
+			function jsonToBase64(json) {
+				const jsonString = JSON.stringify(json, null, 2);
+				return Buffer.from(jsonString).toString('base64');
+			}
 
-			await uploadFile({
-				path: 'image-original.png',
-				content: await imageToBase64(compressedImage.input.url),
-				message: 'Original image',
-			});
-
-			await uploadFile({
-				path: 'image-compressed.png',
-				content: await imageToBase64(compressedImage.output.url),
-				message: 'Compressed image',
-			});
-
-			await uploadFile({
-				path: 'data.json',
-				content: jsonToBase64({
-					original_image: {
-						website_file: compressedImage.input.url,
-						archive_file: `${archive_folder}/image-original.png`,
-						size: compressedImage.input.size,
-						type: compressedImage.input.type,
-						attributes: {
-							title: compressedImage.input.title,
-							alt: compressedImage.input.alt,
-							width: compressedImage.input.width,
-							height: compressedImage.input.height,
-							loading: compressedImage.input.loading
-						}
-					},
-					compressed_image: {
-						archive_file: `${archive_folder}/image-compressed.png`,
-						size: compressedImage.output.size,
-						type: compressedImage.output.type,
-						attributes: {
-							title: '',
-							alt: '',
-							width: '',
-							height: '',
-							loading: ''
-						}
-					},
-					info: {
-						archive_folder,
-						saved_bytes: compressedImage.info.saved_bytes,
-						saved_percent: compressedImage.info.saved_percent,
-						saved_milliseconds: {
-							'25_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 25),
-							'50_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 50),
-							'75_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 75),
-							'100_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 100),
-							'125_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 125),
-							'150_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 150),
-						},
-						image_width: compressedImage.info.image_width,
-						image_height: compressedImage.info.image_height,
-					}
+			await Promise.all([
+				await uploadFile({
+					path: 'image-original.png',
+					content: await imageToBase64(compressedImage.input.url),
+					message: 'Original image',
 				}),
-				message: 'Data',
-			});
+				await uploadFile({
+					path: 'image-compressed.png',
+					content: await imageToBase64(compressedImage.output.url),
+					message: 'Compressed image',
+				}),
+				await uploadFile({
+					path: 'data.json',
+					content: jsonToBase64({
+						original_image: {
+							website_file: compressedImage.input.url,
+							archive_file: `${archive_folder}/image-original.png`,
+							size: compressedImage.input.size,
+							type: compressedImage.input.type,
+							attributes: {
+								title: compressedImage.input.title,
+								alt: compressedImage.input.alt,
+								width: compressedImage.input.width,
+								height: compressedImage.input.height,
+								loading: compressedImage.input.loading
+							}
+						},
+						compressed_image: {
+							archive_file: `${archive_folder}/image-compressed.png`,
+							size: compressedImage.output.size,
+							type: compressedImage.output.type,
+							attributes: {
+								title: '',
+								alt: '',
+								width: '',
+								height: '',
+								loading: ''
+							}
+						},
+						info: {
+							archive_folder,
+							saved_bytes: compressedImage.info.saved_bytes,
+							saved_percent: compressedImage.info.saved_percent,
+							saved_milliseconds: {
+								'25_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 25),
+								'50_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 50),
+								'75_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 75),
+								'100_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 100),
+								'125_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 125),
+								'150_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 150),
+							},
+							image_width: compressedImage.info.image_width,
+							image_height: compressedImage.info.image_height,
+						}
+					}),
+					message: 'Data',
+				})
+			]);
 
 			console.log(`Upload success to ${archive_folder}`);
 		} catch (error) {
