@@ -1,5 +1,5 @@
 {
-  "original": {
+  "original_image": {
     "website_file": "http://www.espaciowaikiki.com/wp-content/uploads/2024/02/Digital-Award-TRA-2024.png",
     "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/qbg7bm31a6z6prcen7rsyqhc6tcy4h1a/image-original.png",
     "size": 53897,
@@ -12,7 +12,7 @@
       "loading": ""
     }
   },
-  "compressed": {
+  "compressed_image": {
     "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/qbg7bm31a6z6prcen7rsyqhc6tcy4h1a/image-compressed.png",
     "size": 18137,
     "type": "image/png",
@@ -27,7 +27,7 @@
   "info": {
     "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/qbg7bm31a6z6prcen7rsyqhc6tcy4h1a",
     "saved_bytes": 35760,
-    "saved_percent": "66.35%",
+    "saved_percent": 66.35,
     "image_width": 1080,
     "image_height": 1080
   }
