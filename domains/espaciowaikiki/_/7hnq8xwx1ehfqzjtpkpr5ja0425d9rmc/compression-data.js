@@ -1,5 +1,5 @@
 {
-  "original": {
+  "original_image": {
     "website_file": "https://www.espaciowaikiki.com/wp-content/uploads/2022/10/Conde-Nast-US-RCA-2022-BEST-Hotel-Hawaii.png",
     "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/7hnq8xwx1ehfqzjtpkpr5ja0425d9rmc/image-original.png",
     "size": 12112,
@@ -12,7 +12,7 @@
       "loading": ""
     }
   },
-  "compressed": {
+  "compressed_image": {
     "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/7hnq8xwx1ehfqzjtpkpr5ja0425d9rmc/image-compressed.png",
     "size": 11522,
     "type": "image/png",
@@ -27,7 +27,7 @@
   "info": {
     "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/7hnq8xwx1ehfqzjtpkpr5ja0425d9rmc",
     "saved_bytes": 590,
-    "saved_percent": "4.86999999999999%",
+    "saved_percent": 4.86999999999999,
     "image_width": 406,
     "image_height": 412
   }
