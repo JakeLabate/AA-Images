@@ -1,23 +1,33 @@
 {
-  "input": {
-    "url": "http://www.espaciowaikiki.com/wp-content/uploads/2024/03/Espacio-Forbes-Five-Star-Rating.png",
+  "original": {
+    "website_file": "http://www.espaciowaikiki.com/wp-content/uploads/2024/03/Espacio-Forbes-Five-Star-Rating.png",
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/repvpedwcwd8qhg2sb1dzpcmh0tt4efr/image-original.png",
     "size": 38868,
     "type": "image/png",
-    "title": "",
-    "alt": "2024 Forbes Travel Guide 5 Star Award",
-    "width": "",
-    "height": "",
-    "loading": ""
+    "attributes": {
+      "title": "",
+      "alt": "2024 Forbes Travel Guide 5 Star Award",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
   },
-  "output": {
-    "url": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/repvpedwcwd8qhg2sb1dzpcmh0tt4efr",
+  "compressed": {
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/repvpedwcwd8qhg2sb1dzpcmh0tt4efr/image-compressed.png",
     "size": 17352,
-    "type": "image/png"
+    "type": "image/png",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
   },
   "info": {
+    "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/repvpedwcwd8qhg2sb1dzpcmh0tt4efr",
     "saved_bytes": 21516,
     "saved_percent": "55.36%",
-    "image_path": "/",
     "image_width": 974,
     "image_height": 1054
   }
