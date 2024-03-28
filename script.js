@@ -204,17 +204,17 @@ class CompressImages {
 			}
 
 			await Promise.all([
-				await uploadFile({
+				uploadFile({
 					path: 'image-original.png',
 					content: await imageToBase64(compressedImage.input.url),
 					message: 'Original image',
 				}),
-				await uploadFile({
+				uploadFile({
 					path: 'image-compressed.png',
 					content: await imageToBase64(compressedImage.output.url),
 					message: 'Compressed image',
 				}),
-				await uploadFile({
+				uploadFile({
 					path: 'data.json',
 					content: jsonToBase64({
 						original_image: {
