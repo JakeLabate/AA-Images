@@ -1,0 +1,42 @@
+{
+  "original_image": {
+    "website_file": "http://s45578.p631.sites.pressdns.com/wp-content/uploads/2024/01/Ilikai-walkway-woman-2560x789-1.jpg",
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/h46q1yags0f84q0qjqxx8k70c0rnrh36/image-original.png",
+    "size": 938684,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "compressed_image": {
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/h46q1yags0f84q0qjqxx8k70c0rnrh36/image-compressed.png",
+    "size": 747367,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "info": {
+    "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/h46q1yags0f84q0qjqxx8k70c0rnrh36",
+    "saved_bytes": 191317,
+    "saved_percent": 20.379999999999995,
+    "saved_milliseconds_per_download_speed": {
+      "25_mbps": 61,
+      "50_mbps": 31,
+      "75_mbps": 20,
+      "100_mbps": 15,
+      "125_mbps": 12,
+      "150_mbps": 10
+    },
+    "image_width": 2560,
+    "image_height": 789
+  }
+}
