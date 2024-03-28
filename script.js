@@ -223,9 +223,9 @@ class CompressImages {
 				}
 			}
 
-			const encodedContent = Buffer.from(JSON.stringify(json, null, 2)).toString('base64');
 
 			// prepare stuff for octokit
+			const encodedContent = Buffer.from(JSON.stringify(json, null, 2)).toString('base64');
 			const githubOwner = 'JakeLabate';
 			const githubEmail = 'jake.a.labate@gmail.com';
 			const githubRepo = 'AA-Images';
