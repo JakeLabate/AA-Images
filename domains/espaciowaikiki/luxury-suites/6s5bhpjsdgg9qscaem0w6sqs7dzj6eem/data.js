@@ -1,12 +1,12 @@
 {
   "original_image": {
-    "website_file": "https://www.espaciowaikiki.com/wp-content/uploads/2023/07/sapphire1.jpg",
+    "website_file": "https://www.espaciowaikiki.com/wp-content/uploads/2023/07/sapphire1-1.jpg",
     "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/luxury-suites/6s5bhpjsdgg9qscaem0w6sqs7dzj6eem/image-original.png",
     "size": 137946,
     "type": "image/jpeg",
     "attributes": {
       "title": "",
-      "alt": "",
+      "alt": "sapphire1",
       "width": "",
       "height": "",
       "loading": ""
