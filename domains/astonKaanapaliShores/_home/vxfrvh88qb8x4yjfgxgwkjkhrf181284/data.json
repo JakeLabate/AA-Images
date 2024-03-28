@@ -1,0 +1,42 @@
+{
+  "original_image": {
+    "website_file": "http://www.astonkaanapalishoresresort.com/wp-content/uploads/2023/10/hero-min-scaled.jpeg",
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/astonKaanapaliShores/_home/vxfrvh88qb8x4yjfgxgwkjkhrf181284/image-original.png",
+    "size": 164160,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "compressed_image": {
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/astonKaanapaliShores/_home/vxfrvh88qb8x4yjfgxgwkjkhrf181284/image-compressed.png",
+    "size": 154146,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "info": {
+    "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/astonKaanapaliShores/_home/vxfrvh88qb8x4yjfgxgwkjkhrf181284",
+    "saved_bytes": 10014,
+    "saved_percent": 6.1000000000000085,
+    "saved_milliseconds_per_download_speed": {
+      "25_mbps": 3,
+      "50_mbps": 2,
+      "75_mbps": 1,
+      "100_mbps": 1,
+      "125_mbps": 1,
+      "150_mbps": 1
+    },
+    "image_width": 2000,
+    "image_height": 1250
+  }
+}
