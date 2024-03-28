@@ -30,11 +30,11 @@
     "saved_percent": 57.14,
     "saved_milliseconds": {
       "25_mbps": 45,
-      "50_mbps": 22.5,
+      "50_mbps": 23,
       "75_mbps": 15,
-      "100_mbps": 11.25,
+      "100_mbps": 11,
       "125_mbps": 9,
-      "150_mbps": 7.5
+      "150_mbps": 8
     },
     "image_width": 1076,
     "image_height": 690
