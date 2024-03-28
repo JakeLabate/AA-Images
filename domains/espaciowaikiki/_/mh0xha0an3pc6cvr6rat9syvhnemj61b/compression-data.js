@@ -1,5 +1,5 @@
 {
-  "original": {
+  "original_image": {
     "website_file": "https://www.espaciowaikiki.com/wp-content/uploads/2022/09/ESPACIO-home-experience-couple-at-pool-790x570-2.jpg",
     "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/mh0xha0an3pc6cvr6rat9syvhnemj61b/image-original.png",
     "size": 164776,
@@ -12,7 +12,7 @@
       "loading": ""
     }
   },
-  "compressed": {
+  "compressed_image": {
     "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/mh0xha0an3pc6cvr6rat9syvhnemj61b/image-compressed.png",
     "size": 114365,
     "type": "image/jpeg",
@@ -27,7 +27,7 @@
   "info": {
     "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/mh0xha0an3pc6cvr6rat9syvhnemj61b",
     "saved_bytes": 50411,
-    "saved_percent": "30.58999999999999%",
+    "saved_percent": 30.58999999999999,
     "image_width": 790,
     "image_height": 570
   }
