@@ -1,0 +1,42 @@
+{
+  "original_image": {
+    "website_file": "http://s45578.p631.sites.pressdns.com/wp-content/uploads/2024/01/Ilikai-skyline-2560x789-1.jpg",
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/vv9yztqy47cnn0s6bk87t80ykz6acp0s/image-original.png",
+    "size": 300680,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "compressed_image": {
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/vv9yztqy47cnn0s6bk87t80ykz6acp0s/image-compressed.png",
+    "size": 300680,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "info": {
+    "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/vv9yztqy47cnn0s6bk87t80ykz6acp0s",
+    "saved_bytes": 0,
+    "saved_percent": 0,
+    "saved_milliseconds_per_download_speed": {
+      "25_mbps": 0,
+      "50_mbps": 0,
+      "75_mbps": 0,
+      "100_mbps": 0,
+      "125_mbps": 0,
+      "150_mbps": 0
+    },
+    "image_width": 2560,
+    "image_height": 789
+  }
+}
