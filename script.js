@@ -46,9 +46,8 @@ class CompressImages {
 				return baseUrl + relativePath;
 			} else if (relativePath.startsWith('http')) {
 				return relativePath;
-			} else {
-				return baseUrl + '/' + relativePath;
 			}
+			return baseUrl + '/' + relativePath;
 		}
 
 		const baseUrl = new URL(this.sitemapUrl).origin;
@@ -145,12 +144,11 @@ class CompressImages {
 		return compressedImages;
 	}
 	async upload(domainCode, compressedImage) {
-
-		const imagePath = compressedImage.info.image_path === '/' ? '/_home/' : compressedImage.info.image_path;
-		const imageFileName = compressedImage.output.url.replace('https://api.tinify.com/output/', ''); // Sanitize filename
-		const archive_folder = `https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/${domainCode}${imagePath}${imageFileName}`;
-
 		try {
+
+			const imagePath = compressedImage.info.image_path === '/' ? '/_home/' : compressedImage.info.image_path;
+			const imageFileName = compressedImage.output.url.replace('https://api.tinify.com/output/', ''); // Sanitize filename
+			const archive_folder = `https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/${domainCode}${imagePath}${imageFileName}`;
 
 			async function imageToBase64(imageUrl) {
 				return new Promise((resolve, reject) => {
@@ -249,7 +247,7 @@ class CompressImages {
 						archive_folder,
 						saved_bytes: compressedImage.info.saved_bytes,
 						saved_percent: compressedImage.info.saved_percent,
-						saved_milliseconds_per_download_speed: {
+						saved_milliseconds: {
 							'25_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 25),
 							'50_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 50),
 							'75_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 75),
