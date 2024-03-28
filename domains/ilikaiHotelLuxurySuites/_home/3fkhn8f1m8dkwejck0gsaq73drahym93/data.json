@@ -1,0 +1,42 @@
+{
+  "original_image": {
+    "website_file": "http://s45578.p631.sites.pressdns.com/wp-content/uploads/2024/01/Ilikai-2nd-deck-pool-2560x789-1.jpg",
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/3fkhn8f1m8dkwejck0gsaq73drahym93/image-original.png",
+    "size": 259553,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "compressed_image": {
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/3fkhn8f1m8dkwejck0gsaq73drahym93/image-compressed.png",
+    "size": 231371,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "info": {
+    "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/3fkhn8f1m8dkwejck0gsaq73drahym93",
+    "saved_bytes": 28182,
+    "saved_percent": 10.86,
+    "saved_milliseconds_per_download_speed": {
+      "25_mbps": 9,
+      "50_mbps": 5,
+      "75_mbps": 3,
+      "100_mbps": 2,
+      "125_mbps": 2,
+      "150_mbps": 2
+    },
+    "image_width": 2560,
+    "image_height": 789
+  }
+}
