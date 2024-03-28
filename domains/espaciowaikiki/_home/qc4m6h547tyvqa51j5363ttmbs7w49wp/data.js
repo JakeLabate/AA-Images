@@ -29,12 +29,12 @@
     "saved_bytes": 3940,
     "saved_percent": 7.299999999999997,
     "saved_seconds": {
-      "25_mbps": "0.00",
-      "50_mbps": "0.00",
-      "75_mbps": "0.00",
-      "100_mbps": "0.00",
-      "125_mbps": "0.00",
-      "150_mbps": "0.00"
+      "25_mbps": 0,
+      "50_mbps": 0,
+      "75_mbps": 0,
+      "100_mbps": 0,
+      "125_mbps": 0,
+      "150_mbps": 0
     },
     "image_width": 790,
     "image_height": 570
