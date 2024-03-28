@@ -149,6 +149,7 @@ class CompressImages {
 	async upload(domainCode, compressedImage) {
 
 		try {
+
 			const imagePath = compressedImage.info.image_path === '/' ? '/_home/' : compressedImage.info.image_path;
 			const imageFileName = compressedImage.output.url.replace('https://api.tinify.com/output/', ''); // Sanitize filename
 			const archive_folder = `https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/${domainCode}${imagePath}${imageFileName}`;
