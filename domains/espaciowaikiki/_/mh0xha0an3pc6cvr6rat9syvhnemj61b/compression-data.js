@@ -10,7 +10,7 @@
     "loading": ""
   },
   "output": {
-    "url": "https://api.tinify.com/output/mh0xha0an3pc6cvr6rat9syvhnemj61b",
+    "url": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_/mh0xha0an3pc6cvr6rat9syvhnemj61b",
     "size": 114365,
     "type": "image/jpeg"
   },
