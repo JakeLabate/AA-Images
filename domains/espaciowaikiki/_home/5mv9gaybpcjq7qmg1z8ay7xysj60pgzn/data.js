@@ -28,7 +28,7 @@
     "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_home/5mv9gaybpcjq7qmg1z8ay7xysj60pgzn",
     "saved_bytes": 90305,
     "saved_percent": 49.33,
-    "saved_milliseconds": {
+    "saved_milliseconds_per_download_speed": {
       "25_mbps": 29,
       "50_mbps": 14,
       "75_mbps": 10,
