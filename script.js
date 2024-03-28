@@ -18,7 +18,7 @@ class CompressImages {
 		this.domainCode = domainCode;
 		this.sitemapUrl = sitemapUrl;
 		this.maxImages = maxImages;
-		this.init().then(response => console.log(response));
+		this.init().then(() => console.log(`finished with ${domainCode}`));
 	}
 	async init() {
 		try {
@@ -26,7 +26,7 @@ class CompressImages {
 			const images = await this.getImageSources(urls);
 			const compressedImages = await this.compressImages(images);
 			for (const image of compressedImages) {
-				await this.uploadFile(this.domainCode, image);
+				await this.upload(this.domainCode, image);
 			}
 		} catch (error) {
 			console.error('Initialization error:', error);
@@ -101,7 +101,6 @@ class CompressImages {
 		for(const image of images) {
 			const imageUrl = image.url;
 			try {
-
 				let result = new Promise((resolve, reject) => {
 					const req = https.request(options, (res) => {
 						let body = '';
@@ -147,39 +146,66 @@ class CompressImages {
 		}
 		return compressedImages;
 	}
-	async uploadFile(domainCode, compressedImage) {
+	async upload(domainCode, compressedImage) {
 
 		try {
 
-			// fetch original image
-			const originalImageUrl = compressedImage.input.url; // Assuming this is the compressed image URL
-			const originalImageUrlResponse = await fetch(originalImageUrl);
-			if (!originalImageUrlResponse.ok) console.error(`Failed to fetch ${originalImageUrl}: ${originalImageUrlResponse.statusText}`);
-			const originalImageUrlResponseBuffer = await originalImageUrlResponse.buffer();
-			const originalImageContent = originalImageUrlResponseBuffer.toString('base64');
+			const imagePath = compressedImage.info.image_path === '/' ? '/_home/' : compressedImage.info.image_path;
+			const imageFileName = compressedImage.output.url.replace('https://api.tinify.com/output/', ''); // Sanitize filename
+			const archive_folder = `https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/${domainCode}${imagePath}${imageFileName}`;
 
-			// fetch newly compressed image
-			const imageUrl = compressedImage.output.url; // Assuming this is the compressed image URL
-			const imageResponse = await fetch(imageUrl);
-			if (!imageResponse.ok) console.error(`Failed to fetch ${imageUrl}: ${imageResponse.statusText}`);
-			const imageBuffer = await imageResponse.buffer();
-			const content = imageBuffer.toString('base64');
-
-			let imagePath = compressedImage.info.image_path === '/' ? '/_home/' : compressedImage.info.image_path;
-			const imageFileName = imageUrl.replace('https://api.tinify.com/output/', ''); // Sanitize filename
-
-			// clean for client-facing & encode the json to base64
+			async function imageToBase64(imageUrl) {
+				return new Promise((resolve, reject) => {
+					fetch(imageUrl)
+						.then(response => response.buffer())
+						.then(buffer => resolve(buffer.toString('base64')))
+						.catch(error => reject(error));
+				});
+			}
 			function millisecondsSaved(byteSize, connectionSpeed) {
-
 				// Convert connection speed from Mbps to bytes per second
 				const speedBytesPerSecond = connectionSpeed * 125000; // 1 byte = 8 bits, 1 Mbps = 1,000,000 bits/s
-
-				// Calculate download time in seconds
-				const result = byteSize / speedBytesPerSecond * 1000;
+				const result = byteSize / speedBytesPerSecond * 1000; // milliseconds
 				return Number(result.toFixed(0));
 			}
+			async function uploadFile({path, content, message}) {
 
-			const archive_folder = `https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/${domainCode}${imagePath}${imageFileName}`;
+				async function getFileSha(path) {
+					// Function to check if the file exists and get its SHA (if it does)
+
+					try {
+						const { data } = await octokit.repos.getContent({
+							owner: 'JakeLabate',
+							repo: 'AA-Images',
+							path: `${archive_folder}/${path}`
+						});
+						return data['sha']; // Return the SHA of the existing file
+					} catch (error) {
+						if (error.status !== 404) {
+							console.error('Error fetching file SHA:', error);
+						}
+						return null;
+					}
+				}
+
+				await octokit.repos.createOrUpdateFileContents({
+					message,
+					content,
+					owner: 'JakeLabate',
+					repo: 'AA-Images',
+					path: `domains/${domainCode}${imagePath}${imageFileName}/${path}`,
+					sha: await getFileSha(path),
+					committer: {
+						name: 'JakeLabate',
+						email: 'jake.a.labate@gmail.com'
+					},
+					author: {
+						name: 'JakeLabate',
+						email: 'jake.a.labate@gmail.com'
+					},
+				});
+			}
+
 			const json = {
 				original_image: {
 					website_file: compressedImage.input.url,
@@ -223,90 +249,27 @@ class CompressImages {
 				}
 			}
 
-
-			// prepare stuff for octokit
-			const encodedContent = Buffer.from(JSON.stringify(json, null, 2)).toString('base64');
-			const githubOwner = 'JakeLabate';
-			const githubEmail = 'jake.a.labate@gmail.com';
-			const githubRepo = 'AA-Images';
-			const githubPath = `domains/${domainCode}${imagePath}${imageFileName}`;
-
-			// Function to check if the file exists and get its SHA (if it does)
-			const getFileSha = async (filePath) => {
-				try {
-					const { data } = await octokit.repos.getContent({
-						owner: githubOwner,
-						repo: githubRepo,
-						path: `${githubPath}/${filePath}`
-					});
-					return data['sha']; // Return the SHA of the existing file
-				} catch (error) {
-					if (error.status !== 404) {
-						console.error('Error fetching file SHA:', error);
-					}
-					return null;
+			const uploads = [
+				{
+					path: 'image-original.png',
+					content: await imageToBase64(compressedImage.input.url),
+					message: 'Original image',
+				},
+				{
+					path: 'image-compressed.png',
+					content: await imageToBase64(compressedImage.output.url),
+					message: 'Compressed image',
+				},
+				{
+					path: 'data.json',
+					content: Buffer.from(JSON.stringify(json, null, 2)).toString('base64'),
+					message: 'Data',
 				}
-			};
+			];
 
-			// upload original image
-			const originalPath = 'image-original.png';
-			let sha = await getFileSha(originalPath);
-			await octokit.repos.createOrUpdateFileContents({
-				owner: githubOwner,
-				repo: githubRepo,
-				path: `${githubPath}/${originalPath}`,
-				message: `Original image`,
-				content: originalImageContent,
-				sha,
-				committer: {
-					name: githubOwner,
-					email: githubEmail
-				},
-				author: {
-					name: githubOwner,
-					email: githubEmail
-				},
-			});
-
-			// upload newly compressed image
-			const compressionPath = 'image-compressed.png';
-			sha = await getFileSha(compressionPath);
-			await octokit.repos.createOrUpdateFileContents({
-				owner: githubOwner,
-				repo: githubRepo,
-				path: `${githubPath}/${compressionPath}`,
-				message: `Compressed image`,
-				content,
-				sha,
-				committer: {
-					name: githubOwner,
-					email: githubEmail
-				},
-				author: {
-					name: githubOwner,
-					email: githubEmail
-				},
-			});
-
-			// upload json compression data
-			const jsonDataPath = 'data.js'
-			sha = await getFileSha(jsonDataPath);
-			await octokit.repos.createOrUpdateFileContents({
-				owner: githubOwner,
-				repo: githubRepo,
-				path: `${githubPath}/${jsonDataPath}`,
-				message: `Data`,
-				content: encodedContent,
-				sha,
-				committer: {
-					name: githubOwner,
-					email: githubEmail
-				},
-				author: {
-					name: githubOwner,
-					email: githubEmail
-				},
-			});
+			for (const upload of uploads) {
+				await uploadFile(upload);
+			}
 
 			console.log(`Upload success to ${archive_folder}`);
 		} catch (error) {
@@ -315,8 +278,71 @@ class CompressImages {
 	}
 }
 
+// astonAtTheWhalerOnKaanapaliBeach
 new CompressImages({
-	domainCode: 'espaciowaikiki',
-	sitemapUrl: 'https://www.espaciowaikiki.com/page-sitemap.xml',
-	maxImages: 20
+	domainCode: 'astonAtTheWhalerOnKaanapaliBeach',
+	// https://www.astonwhaler.com/sitemap_index.xml
+	// sitemapUrl: 'https://www.astonwhaler.com/post-sitemap.xml',
+	sitemapUrl: 'https://www.astonwhaler.com/page-sitemap.xml',
+	// sitemapUrl: 'https://www.astonwhaler.com/category-sitemap.xml',
+	// sitemapUrl: 'https://www.astonwhaler.com/author-sitemap.xml'
+	maxImages: 1
 })
+
+// astonKaanapaliShores
+new CompressImages({
+	domainCode: 'astonKaanapaliShores',
+	// https://www.astonkaanapalishoresresort.com/sitemap_index.xml
+	sitemapUrl: 'https://www.astonkaanapalishoresresort.com/page-sitemap.xml',
+	maxImages: 1
+})
+
+// botánikaOsaPeninsula
+new CompressImages({
+	domainCode: 'botánikaOsaPeninsula',
+	// https://botanikaresort.com/sitemap_index.xml
+	// sitemapUrl: 'https://botanikaresort.com/post-sitemap.xml',
+	sitemapUrl: 'https://botanikaresort.com/page-sitemap.xml',
+	maxImages: 1
+})
+
+// espacioWaikiki
+new CompressImages({
+	domainCode: 'espacioWaikiki',
+	// https://www.espaciowaikiki.com/sitemap_index.xml
+	// sitemapUrl: 'http://www.espaciowaikiki.com/post-sitemap.xml'
+	sitemapUrl: 'https://www.espaciowaikiki.com/page-sitemap.xml',
+	// sitemapUrl: https://www.espaciowaikiki.com/category-sitemap.xml
+	// sitemapUrl: https://www.espaciowaikiki.com/post_tag-sitemap.xml
+	// sitemapUrl: https://www.espaciowaikiki.com/author-sitemap.xml
+	maxImages: 1
+})
+
+// espacioWaikiki_jp
+new CompressImages({
+	domainCode: 'espacioWaikiki_jp',
+	sitemapUrl: 'https://www.espaciowaikiki.jp/sitemap.xml',
+	maxImages: 1
+})
+
+// ilikaiHotelLuxurySuites
+new CompressImages({
+	domainCode: 'ilikaiHotelLuxurySuites',
+	// https://www.ilikaihotel.com/sitemap_index.xml
+	// sitemapUrl: 'https://www.ilikaihotel.com/post-sitemap.xml',
+	sitemapUrl: 'https://www.ilikaihotel.com/page-sitemap.xml',
+	// sitemapUrl': 'https://www.ilikaihotel.com/category-sitemap.xml',
+	// sitemapUrl': 'https://www.ilikaihotel.com/author-sitemap.xml'
+	maxImages: 1
+})
+
+/*
+// mauiKaanapaliVillas // error with sitemap
+new CompressImages({
+	domainCode: 'mauiKaanapaliVillas',
+	// https://www.astonmauikaanapalivillas.com/sitemap_index.xml
+	sitemapUrl: '',
+	maxImages: 1
+})
+
+*/
