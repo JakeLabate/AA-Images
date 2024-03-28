@@ -28,13 +28,13 @@
     "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/espaciowaikiki/_home/fggd0esv8j5cw9r7bxjjb42sjrknpk6j",
     "saved_bytes": 173,
     "saved_percent": 4.299999999999997,
-    "saved_seconds": {
-      "25_mbps": 0,
-      "50_mbps": 0,
-      "75_mbps": 0,
-      "100_mbps": 0,
-      "125_mbps": 0,
-      "150_mbps": 0
+    "saved_milliseconds": {
+      "25_mbps": 0.05536,
+      "50_mbps": 0.02768,
+      "75_mbps": 0.01845,
+      "100_mbps": 0.01384,
+      "125_mbps": 0.01107,
+      "150_mbps": 0.00923
     },
     "image_width": 792,
     "image_height": 510
