@@ -4,6 +4,7 @@ import https from 'https';
 import xml2js from 'xml2js';
 import cheerio from 'cheerio';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 const TINIFY_API_KEY = process.env.TINIFY_API_KEY;
