@@ -81,41 +81,37 @@ class CompressImages {
 		}
 		return images;
 	}
-	async compressImages (images) {
-		const encodedKey = Buffer.from(`api:${TINIFY_API_KEY}`).toString('base64');
-		const options = {
-			hostname: 'api.tinify.com',
-			port: 443,
-			path: '/shrink',
-			method: 'POST',
-			headers: {
-				'Authorization': `Basic ${encodedKey}`,
-				'Content-Type': 'application/json'
-			}
-		};
+	async compressImages(images) {
 
 		let compressedImages = [];
 
-		const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 		for(const image of images) {
-			const imageUrl = image.url;
 			try {
+
 				let result = new Promise((resolve, reject) => {
-					const req = https.request(options, (res) => {
+					const req = https.request({
+						hostname: 'api.tinify.com',
+						port: 443,
+						path: '/shrink',
+						method: 'POST',
+						headers: {
+							'Authorization': `Basic ${Buffer.from(`api:${TINIFY_API_KEY}`).toString('base64')}`,
+							'Content-Type': 'application/json'
+						}
+					}, (res) => {
 						let body = '';
 						res.on('data', (chunk) => body += chunk);
 						res.on('end', () => resolve(JSON.parse(body)));
 					});
 					req.on('error', (e) => reject(e));
-					req.write(JSON.stringify({source: {url: imageUrl}}));
+					req.write(JSON.stringify({source: {url: image.url}}));
 					req.end();
 				});
 
 				result = await result;
 				compressedImages.push({
 					input: {
-						url: imageUrl,
+						url: image.url,
 						size: result.input.size,
 						type: result.input.type,
 						title: image.title,
@@ -138,56 +134,54 @@ class CompressImages {
 					},
 				});
 
-				await delay(1000);
+				// throttle requests
+				new Promise(resolve => setTimeout(resolve, 1000));
 
 			} catch(error) {
-				console.error(`Error compressing image ${imageUrl}:`, error);
+				console.error(`Error compressing image ${image.url}:`, error);
 			}
 		}
+
 		return compressedImages;
 	}
 	async upload(domainCode, compressedImage) {
 
-		try {
+		const imagePath = compressedImage.info.image_path === '/' ? '/_home/' : compressedImage.info.image_path;
+		const imageFileName = compressedImage.output.url.replace('https://api.tinify.com/output/', ''); // Sanitize filename
+		const archive_folder = `https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/${domainCode}${imagePath}${imageFileName}`;
 
-			const imagePath = compressedImage.info.image_path === '/' ? '/_home/' : compressedImage.info.image_path;
-			const imageFileName = compressedImage.output.url.replace('https://api.tinify.com/output/', ''); // Sanitize filename
-			const archive_folder = `https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/${domainCode}${imagePath}${imageFileName}`;
+		try {
 
 			async function imageToBase64(imageUrl) {
 				return new Promise((resolve, reject) => {
 					fetch(imageUrl)
-						.then(response => response.buffer())
-						.then(buffer => resolve(buffer.toString('base64')))
-						.catch(error => reject(error));
+					.then(response => response.buffer())
+					.then(buffer => resolve(buffer.toString('base64')))
+					.catch(error => reject(error));
 				});
 			}
-			function millisecondsSaved(byteSize, connectionSpeed) {
-				// Convert connection speed from Mbps to bytes per second
-				const speedBytesPerSecond = connectionSpeed * 125000; // 1 byte = 8 bits, 1 Mbps = 1,000,000 bits/s
-				const result = byteSize / speedBytesPerSecond * 1000; // milliseconds
-				return Number(result.toFixed(0));
+			function jsonToBase64(json) {
+				const jsonString = JSON.stringify(json, null, 2);
+				return Buffer.from(jsonString).toString('base64');
+			}
+			async function getFileSha(path) {
+				// Function to check if the file exists and get its SHA (if it does)
+
+				try {
+					const { data } = await octokit.repos.getContent({
+						owner: 'JakeLabate',
+						repo: 'AA-Images',
+						path: `${archive_folder}/${path}`
+					});
+					return data['sha']; // Return the SHA of the existing file
+				} catch (error) {
+					if (error.status !== 404) {
+						console.error('Error fetching file SHA:', error);
+					}
+					return null;
+				}
 			}
 			async function uploadFile({path, content, message}) {
-
-				async function getFileSha(path) {
-					// Function to check if the file exists and get its SHA (if it does)
-
-					try {
-						const { data } = await octokit.repos.getContent({
-							owner: 'JakeLabate',
-							repo: 'AA-Images',
-							path: `${archive_folder}/${path}`
-						});
-						return data['sha']; // Return the SHA of the existing file
-					} catch (error) {
-						if (error.status !== 404) {
-							console.error('Error fetching file SHA:', error);
-						}
-						return null;
-					}
-				}
-
 				await octokit.repos.createOrUpdateFileContents({
 					message,
 					content,
@@ -205,71 +199,70 @@ class CompressImages {
 					},
 				});
 			}
+			function millisecondsSaved(byteSize, connectionSpeed) { // Convert connection speed from Mbps to bytes per second
+				const speedBytesPerSecond = connectionSpeed * 125000; // 1 byte = 8 bits, 1 Mbps = 1,000,000 bits/s
+				const result = byteSize / speedBytesPerSecond * 1000; // milliseconds
+				return Number(result.toFixed(0));
+			}
 
-			const json = {
-				original_image: {
-					website_file: compressedImage.input.url,
-					archive_file: `${archive_folder}/image-original.png`,
-					size: compressedImage.input.size,
-					type: compressedImage.input.type,
-					attributes: {
-						title: compressedImage.input.title,
-						alt: compressedImage.input.alt,
-						width: compressedImage.input.width,
-						height: compressedImage.input.height,
-						loading: compressedImage.input.loading
-					}
-				},
-				compressed_image: {
-					archive_file: `${archive_folder}/image-compressed.png`,
-					size: compressedImage.output.size,
-					type: compressedImage.output.type,
-					attributes: {
-						title: '',
-						alt: '',
-						width: '',
-						height: '',
-						loading: ''
-					}
-				},
-				info: {
-					archive_folder,
-					saved_bytes: compressedImage.info.saved_bytes,
-					saved_percent: compressedImage.info.saved_percent,
-					saved_milliseconds_per_download_speed: {
-						'25_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 25),
-						'50_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 50),
-						'75_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 75),
-						'100_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 100),
-						'125_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 125),
-						'150_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 150),
+			await uploadFile({
+				path: 'image-original.png',
+				content: await imageToBase64(compressedImage.input.url),
+				message: 'Original image',
+			});
+
+			await uploadFile({
+				path: 'image-compressed.png',
+				content: await imageToBase64(compressedImage.output.url),
+				message: 'Compressed image',
+			});
+
+			await uploadFile({
+				path: 'data.json',
+				content: jsonToBase64({
+					original_image: {
+						website_file: compressedImage.input.url,
+						archive_file: `${archive_folder}/image-original.png`,
+						size: compressedImage.input.size,
+						type: compressedImage.input.type,
+						attributes: {
+							title: compressedImage.input.title,
+							alt: compressedImage.input.alt,
+							width: compressedImage.input.width,
+							height: compressedImage.input.height,
+							loading: compressedImage.input.loading
+						}
 					},
-					image_width: compressedImage.info.image_width,
-					image_height: compressedImage.info.image_height,
-				}
-			}
-
-			const uploads = [
-				{
-					path: 'image-original.png',
-					content: await imageToBase64(compressedImage.input.url),
-					message: 'Original image',
-				},
-				{
-					path: 'image-compressed.png',
-					content: await imageToBase64(compressedImage.output.url),
-					message: 'Compressed image',
-				},
-				{
-					path: 'data.json',
-					content: Buffer.from(JSON.stringify(json, null, 2)).toString('base64'),
-					message: 'Data',
-				}
-			];
-
-			for (const upload of uploads) {
-				await uploadFile(upload);
-			}
+					compressed_image: {
+						archive_file: `${archive_folder}/image-compressed.png`,
+						size: compressedImage.output.size,
+						type: compressedImage.output.type,
+						attributes: {
+							title: '',
+							alt: '',
+							width: '',
+							height: '',
+							loading: ''
+						}
+					},
+					info: {
+						archive_folder,
+						saved_bytes: compressedImage.info.saved_bytes,
+						saved_percent: compressedImage.info.saved_percent,
+						saved_milliseconds_per_download_speed: {
+							'25_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 25),
+							'50_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 50),
+							'75_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 75),
+							'100_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 100),
+							'125_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 125),
+							'150_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 150),
+						},
+						image_width: compressedImage.info.image_width,
+						image_height: compressedImage.info.image_height,
+					}
+				}),
+				message: 'Data',
+			});
 
 			console.log(`Upload success to ${archive_folder}`);
 		} catch (error) {
