@@ -1,0 +1,42 @@
+{
+  "original_image": {
+    "website_file": "https://s45578.p631.sites.pressdns.com/wp-content/uploads/2024/01/home-offers-3.jpg",
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/xj84j4x2m5jkqencw7g0vvzwv47xwsk2/image-original.png",
+    "size": 164225,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "compressed_image": {
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/xj84j4x2m5jkqencw7g0vvzwv47xwsk2/image-compressed.png",
+    "size": 108038,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "info": {
+    "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/xj84j4x2m5jkqencw7g0vvzwv47xwsk2",
+    "saved_bytes": 56187,
+    "saved_percent": 34.209999999999994,
+    "saved_milliseconds_per_download_speed": {
+      "25_mbps": 18,
+      "50_mbps": 9,
+      "75_mbps": 6,
+      "100_mbps": 4,
+      "125_mbps": 4,
+      "150_mbps": 3
+    },
+    "image_width": 603,
+    "image_height": 509
+  }
+}

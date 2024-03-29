@@ -1,0 +1,42 @@
+{
+  "original_image": {
+    "website_file": "http://s45578.p631.sites.pressdns.com/wp-content/uploads/2024/01/Ilikai-family-living-room-1800x1200-1.jpg",
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/4paa9y6nrs292ym2x8rsrk37pnf80pdv/image-original.png",
+    "size": 407116,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "compressed_image": {
+    "archive_file": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/4paa9y6nrs292ym2x8rsrk37pnf80pdv/image-compressed.png",
+    "size": 255870,
+    "type": "image/jpeg",
+    "attributes": {
+      "title": "",
+      "alt": "",
+      "width": "",
+      "height": "",
+      "loading": ""
+    }
+  },
+  "info": {
+    "archive_folder": "https://github.com/JakeLabate/Hooray-SEO-Compress/blob/main/domains/ilikaiHotelLuxurySuites/_home/4paa9y6nrs292ym2x8rsrk37pnf80pdv",
+    "saved_bytes": 151246,
+    "saved_percent": 37.150000000000006,
+    "saved_milliseconds_per_download_speed": {
+      "25_mbps": 48,
+      "50_mbps": 24,
+      "75_mbps": 16,
+      "100_mbps": 12,
+      "125_mbps": 10,
+      "150_mbps": 8
+    },
+    "image_width": 1800,
+    "image_height": 1200
+  }
+}
