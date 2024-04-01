@@ -306,6 +306,8 @@ new CompressImages({
 	maxImages: 1
 })
 
+ */
+
 // espacioWaikiki
 new CompressImages({
 	domainCode: 'espacioWaikiki',
