@@ -217,18 +217,17 @@ class CompressImages {
 				return Buffer.from(jsonString).toString('base64');
 			}
 
-			await Promise.all([
-				uploadFile({
+			await uploadFile({
 					path: 'image-original.png',
 					content: await imageToBase64(compressedImage.input.url),
 					message: 'Original image',
-				}),
-				uploadFile({
+				});
+			await uploadFile({
 					path: 'image-compressed.png',
 					content: await imageToBase64(compressedImage.output.url),
 					message: 'Compressed image',
-				}),
-				uploadFile({
+				});
+			await uploadFile({
 					path: 'data.json',
 					content: jsonToBase64({
 						original_image: {
@@ -261,8 +260,10 @@ class CompressImages {
 						}
 					}),
 					message: 'Data',
-				})
-			]);
+				});
+
+			// wait 1 second
+			await new Promise(resolve => setTimeout(resolve, 1000));
 
 			console.log(`Upload success to ${archive_folder}`);
 		} catch (error) {
@@ -271,9 +272,10 @@ class CompressImages {
 	}
 }
 
+
 new CompressImages({
-	domainCode: 'hotelswexan',
-	sitemapUrl: 'https://hotelswexan.com/post-sitemap.xml',
+	domainCode: 'jakelabate',
+	sitemapUrl: 'https://www.jakelabate.com/sitemap.xml',
 })
 
 /*
@@ -306,7 +308,6 @@ new CompressImages({
 	maxImages: 1
 })
 
- */
 
 // espacioWaikiki
 new CompressImages({
