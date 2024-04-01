@@ -154,6 +154,7 @@ class CompressImages {
 		return compressedImages;
 	}
 	async upload(domainCode, compressedImage) {
+
 		try {
 
 			const imagePath = compressedImage.info.image_path === '/' ? '/_home/' : compressedImage.info.image_path;
@@ -168,6 +169,7 @@ class CompressImages {
 					.catch(error => reject(error));
 				});
 			}
+
 			async function getFileSha(path) {
 				// Function to check if the file exists and get its SHA (if it does)
 				try {
@@ -184,8 +186,9 @@ class CompressImages {
 					return null;
 				}
 			}
+
 			async function uploadFile({path, content, message}) {
-				await octokit.repos.createOrUpdateFileContents({
+				return await octokit.repos.createOrUpdateFileContents({
 					content,
 					message,
 					owner: 'JakeLabate',
@@ -202,63 +205,64 @@ class CompressImages {
 					},
 				});
 			}
+
 			function millisecondsSaved(byteSize, connectionSpeed) { // Convert connection speed from Mbps to bytes per second
 				const speedBytesPerSecond = connectionSpeed * 125000; // 1 byte = 8 bits, 1 Mbps = 1,000,000 bits/s
 				const result = byteSize / speedBytesPerSecond * 1000; // milliseconds
 				return Number(result.toFixed(0));
 			}
+
 			function jsonToBase64(json) {
 				const jsonString = JSON.stringify(json, null, 2);
 				return Buffer.from(jsonString).toString('base64');
 			}
 
-			const originalImage = uploadFile({
-				path: 'image-original.png',
-				content: await imageToBase64(compressedImage.input.url),
-				message: 'Original image',
-			});
-			const newImage = uploadFile({
+			await Promise.all([
+				uploadFile({
+					path: 'image-original.png',
+					content: await imageToBase64(compressedImage.input.url),
+					message: 'Original image',
+				}),
+				uploadFile({
 					path: 'image-compressed.png',
 					content: await imageToBase64(compressedImage.output.url),
 					message: 'Compressed image',
-				});
-			const dataJSON = uploadFile({
-				path: 'data.json',
-				content: jsonToBase64({
-					original_image: {
-						website_file: compressedImage.input.url,
-						archive_file: `${archive_folder}/image-original.png`,
-						size: compressedImage.input.size,
-						type: compressedImage.input.type,
-						attributes: compressedImage.input.attributes
-					},
-					compressed_image: {
-						archive_file: `${archive_folder}/image-compressed.png`,
-						size: compressedImage.output.size,
-						type: compressedImage.output.type,
-						attributes: compressedImage.output.attributes
-					},
-					info: {
-						archive_folder,
-						saved_bytes: compressedImage.info.saved_bytes,
-						saved_percent: compressedImage.info.saved_percent,
-						saved_milliseconds: {
-							'25_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 25),
-							'50_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 50),
-							'75_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 75),
-							'100_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 100),
-							'125_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 125),
-							'150_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 150),
-						},
-						image_width: compressedImage.info.image_width,
-						image_height: compressedImage.info.image_height,
-					}
 				}),
-				message: 'Data',
-			});
-
-			await Promise.all([originalImage, newImage, dataJSON]);
-			// new Promise(resolve => setTimeout(resolve, 500)); // throttle requests
+				uploadFile({
+					path: 'data.json',
+					content: jsonToBase64({
+						original_image: {
+							website_file: compressedImage.input.url,
+							archive_file: `${archive_folder}/image-original.png`,
+							size: compressedImage.input.size,
+							type: compressedImage.input.type,
+							attributes: compressedImage.input.attributes
+						},
+						compressed_image: {
+							archive_file: `${archive_folder}/image-compressed.png`,
+							size: compressedImage.output.size,
+							type: compressedImage.output.type,
+							attributes: compressedImage.output.attributes
+						},
+						info: {
+							archive_folder,
+							saved_bytes: compressedImage.info.saved_bytes,
+							saved_percent: compressedImage.info.saved_percent,
+							saved_milliseconds: {
+								'25_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 25),
+								'50_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 50),
+								'75_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 75),
+								'100_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 100),
+								'125_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 125),
+								'150_mbps': millisecondsSaved(compressedImage.info.saved_bytes, 150),
+							},
+							image_width: compressedImage.info.image_width,
+							image_height: compressedImage.info.image_height,
+						}
+					}),
+					message: 'Data',
+				})
+			]);
 
 			console.log(`Upload success to ${archive_folder}`);
 		} catch (error) {
@@ -266,6 +270,13 @@ class CompressImages {
 		}
 	}
 }
+
+new CompressImages({
+	domainCode: 'hotelswexan',
+	sitemapUrl: 'https://hotelswexan.com/post-sitemap.xml',
+})
+
+/*
 
 // astonAtTheWhalerOnKaanapaliBeach
 new CompressImages({
